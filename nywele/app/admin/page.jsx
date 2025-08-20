@@ -1,8 +1,15 @@
+// the existing code for /app/admin/page.jsx code is:
+
 'use client';
+import './admin.css';
+import Link from "next/link";
 
-import React, { useState, useEffect } from 'react';
-import './AdminDashboard.css';
+import React, { useState, useEffect,useRef } from 'react';
+import { useRouter } from "next/navigation";
+import { logout } from '../lib/auth';
 
+
+const INACTIVITY_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 const API_URL = '/api/products'; // fixed relative URL for Next.js App Router
 
 const AdminDashboard = () => {
@@ -15,6 +22,25 @@ const AdminDashboard = () => {
     images: [],
   });
   const [editingProduct, setEditingProduct] = useState(null);
+  
+  const router = useRouter();
+  const logoutTimer = useRef(null);
+
+  const resetTimer = () => {
+    if (logoutTimer.current) {
+      clearTimeout(logoutTimer.current);
+    }
+    logoutTimer.current = setTimeout(() => {
+      handleLogout();
+    }, INACTIVITY_TIMEOUT_MS);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
+
+
 
   useEffect(() => {
     fetchProducts();
@@ -116,50 +142,55 @@ const AdminDashboard = () => {
     }
   };
 
+
+
+ useEffect(() => {
+    const handleActivity = () => {
+      resetTimer();
+    };
+
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('keypress', handleActivity);
+    window.addEventListener('scroll', handleActivity);
+    window.addEventListener('click', handleActivity);
+
+    resetTimer();
+
+    return () => {
+      if (logoutTimer.current) {
+        clearTimeout(logoutTimer.current);
+      }
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('keypress', handleActivity);
+      window.removeEventListener('scroll', handleActivity);
+      window.removeEventListener('click', handleActivity);
+    };
+  }, []);
+
+
   return (
     <div className="admin-dashboard">
+        <div className="dashboard-header">
       <h2 className="dashboard-title">Admin Dashboard</h2>
+      <Link href="/" className="back-link">← Back to Site</Link>
+
+      <form action={handleLogout}>
+        <button type="submit"
+        className="bg-red-500 text-white px-4 py-2 rounded mt-4"
+        >Logout</button>
+      </form>
+      
+    </div>
+
       <form onSubmit={handleSubmit} className="product-form">
+
         <h3>{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
-        <input
-          type="text"
-          name="title"
-          placeholder="Product Title"
-          value={form.title}
-          onChange={handleFormChange}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Product Description"
-          value={form.description}
-          onChange={handleFormChange}
-          required
-        />
-        <input
-          type="number"
-          name="price"
-          placeholder="Price"
-          value={form.price}
-          onChange={handleFormChange}
-          step="0.01"
-          required
-        />
-        <input
-          type="text"
-          name="colors"
-          placeholder="Colors (e.g., #000000,#8B4513)"
-          value={form.colors}
-          onChange={handleFormChange}
-          required={!editingProduct}
-        />
-        <input
-          type="file"
-          name="images"
-          onChange={handleFormChange}
-          multiple
-          required={!editingProduct}
-        />
+        <input type="text" name="title" placeholder="Product Title" value={form.title} onChange={handleFormChange} required/>
+        <textarea name="description" placeholder="Product Description" value={form.description} onChange={handleFormChange} required/>
+        <input type="number" name="price" placeholder="Price" value={form.price} onChange={handleFormChange} step="0.01" required />
+        <input  name="colors"  placeholder="Colors (e.g., #000000,#8B4513)"   value={form.colors}   onChange={handleFormChange}  required={!editingProduct}  />
+        <input  type="file"  name="images"  onChange={handleFormChange}  multiple   required={!editingProduct} />
+
         <button type="submit">
           {editingProduct ? 'Update Product' : 'Add Product'}
         </button>
@@ -198,3 +229,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

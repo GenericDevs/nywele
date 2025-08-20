@@ -1,0 +1,87 @@
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #fff7f0, #fce5da);
+  padding: 80px 40px;
+  flex-wrap: wrap;
+  gap: 40px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.hero-text {
+  flex: 1;
+  max-width: 550px;
+}
+
+.hero-text h1 {
+  font-size: 58px;
+  line-height: 1.1;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.hero-text h1 span {
+  color: #e57c5b;
+}
+
+.hero-subtitle {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.shop-button {
+  margin-top: 30px;
+  padding: 14px 35px;
+  font-size: 17px;
+  font-weight: bold;
+  background-color: #e57c5b;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(229, 124, 91, 0.4);
+  transition: all 0.3s ease;
+}
+
+.shop-button:hover {
+  background-color: #d86b4a;
+  box-shadow: 0 6px 20px rgba(229, 124, 91, 0.5);
+  transform: translateY(-2px);
+}
+
+.hero-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.4s ease;
+}
+
+.hero-image img:hover {
+  transform: scale(1.03);
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .hero-text h1 {
+    font-size: 42px;
+  }
+  .hero-subtitle {
+    font-size: 16px;
+  }
+}

@@ -1,5 +1,5 @@
-# # Use a Node.js base image
-# FROM node:18-alpine
+# Use a Node.js base image
+# FROM node:20-alpine
 
 # WORKDIR /app
 
@@ -16,7 +16,10 @@
 # CMD ["npm", "run", "dev"]
 
 
-# ///////////////////deplyment/////////////////////
+# # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# # /////////////////// Deployment //////////////////////////////////////////////////////////////////////////////////////////////////////////
+# # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 # Use a Node.js base image
 # Stage 1: Build the application
 FROM node:20-alpine AS builder
@@ -48,7 +51,7 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.env ./.env
+# COPY --from=builder /app/.env ./.env
 
 # The prisma migrate deploy command needs the Prisma schema
 COPY --from=builder /app/prisma ./prisma

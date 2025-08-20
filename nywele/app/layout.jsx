@@ -1,7 +1,7 @@
 // app/layout.jsx
 
 import './globals.css'; // Global Tailwind CSS (if you set it up)
-import './dashboard/AdminDashboard.css'; // Your specific dashboard CSS
+// import './dashboard/AdminDashboard.css'; // Your specific dashboard CSS
 
 export const metadata = {
   title: 'Nywele Admin Dashboard',
